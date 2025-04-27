@@ -44,7 +44,12 @@ const SearchHeader = ({showBackButton, onEdit, onSubmit}: SearchHeaderType) => {
           }}
           placeholder="Input here"
         />
-        <Icon name="search" size={28} color="#000" />
+        <TouchableOpacity
+          onPress={() => {
+            onSubmit();
+          }}>
+          <Icon name="search" size={28} color="#000" />
+        </TouchableOpacity>
       </View>
     </View>
   );
