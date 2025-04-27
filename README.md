@@ -167,4 +167,53 @@ If you're having issues getting the above steps to work, see the [Troubleshootin
 
 ---
 
+# Building a Production APK (Android)
+
+To generate a production-ready APK for Android, you can usually run:
+
+```sh
+cd android
+./gradlew assembleRelease
+```
+
+- The APK will be in `android/app/build/outputs/apk/release/app-release.apk`
+
+For many development setups (especially if you are just testing or using the debug keystore), **this may work directly without any extra configuration**.
+
+---
+
+**If you see errors about signing configs or want to upload your app to the Play Store:**
+
+1. **Generate a Keystore (only once):**
+
+   ```sh
+   keytool -genkeypair -v -keystore my-release-key.keystore -alias my-key-alias -keyalg RSA -keysize 2048 -validity 10000
+   ```
+
+   - Save the `my-release-key.keystore` file in your `android/app` directory.
+
+2. **Configure the Keystore in `android/gradle.properties`:**
+
+   ```properties
+   MYAPP_RELEASE_STORE_FILE=my-release-key.keystore
+   MYAPP_RELEASE_KEY_ALIAS=my-key-alias
+   MYAPP_RELEASE_STORE_PASSWORD=*****
+   MYAPP_RELEASE_KEY_PASSWORD=*****
+   ```
+
+3. **Edit `android/app/build.gradle`:**
+   Make sure the `signingConfigs` and `release` sections use the above variables.
+
+4. **Build the APK again:**
+
+   ```sh
+   ./gradlew assembleRelease
+   ```
+
+5. **Test the APK on a real device before publishing.**
+
+For more details, see the [official React Native docs](https://reactnative.dev/docs/signed-apk-android).
+
+---
+
 **For further details, see comments in the codebase or reach out to the project maintainer.**
