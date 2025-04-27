@@ -1,4 +1,17 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+This is a [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+
+---
+
+# Table of Contents
+
+- [Getting Started](#getting-started)
+- [Project Structure](#project-structure)
+- [Main Functionalities](#main-functionalities)
+- [API URL / IP Address Configuration (Local Development)](#api-url--ip-address-configuration-local-development)
+- [Troubleshooting](#troubleshooting)
+- [Learn More](#learn-more)
+
+---
 
 # Getting Started
 
@@ -6,9 +19,7 @@ This is a new [**React Native**](https://reactnative.dev) project, bootstrapped 
 
 ## Step 1: Start Metro
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
-
-To start the Metro dev server, run the following command from the root of your React Native project:
+Metro is the JavaScript build tool for React Native.
 
 ```sh
 # Using npm
@@ -18,80 +29,142 @@ npm start
 yarn start
 ```
 
-## Step 2: Build and run your app
+## Step 2: Build and Run Your App
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+With Metro running, open a new terminal and use one of the following commands:
 
 ### Android
 
 ```sh
-# Using npm
 npm run android
-
-# OR using Yarn
+# OR
 yarn android
 ```
 
 ### iOS
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
-
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
+For iOS, install CocoaPods dependencies first:
 
 ```sh
 bundle install
-```
-
-Then, and every time you update your native dependencies, run:
-
-```sh
 bundle exec pod install
 ```
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+Then run:
 
 ```sh
-# Using npm
 npm run ios
-
-# OR using Yarn
+# OR
 yarn ios
 ```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
-
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+If everything is set up correctly, you should see your app running in the Android Emulator, iOS Simulator, or your device.
 
 ## Step 3: Modify your app
 
-Now that you have successfully run the app, let's make changes!
+Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
-
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+To forcefully reload:
 
 - **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
 - **iOS**: Press <kbd>R</kbd> in iOS Simulator.
 
-## Congratulations! :tada:
+---
 
-You've successfully run and modified your React Native App. :partying_face:
+# Project Structure
 
-### Now what?
+```
+app/
+├── src/
+│   ├── layouts/           # Layout components (e.g., Home, Layout)
+│   ├── redux/             # Redux store, actions, reducers, types
+│   ├── services/
+│   │   └── https/         # HTTP requests (API calls)
+│   ├── types/             # TypeScript types/interfaces for navigation, state, etc.
+│   ├── views/             # Main screen components (LandingView, Profile, Settings, ProductListing)
+│   ├── widgets/           # Reusable UI widgets (e.g., HomeNavigations, SearchHeader)
+│   └── constants/         # App-wide constants (e.g., API URLs)
+├── App.tsx                # App entry point, navigation setup
+├── README.md              # This file
+└── ...
+```
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
+---
+
+# Main Functionalities
+
+- **Navigation:** Uses React Navigation with a stack navigator for Home, Profile, Settings, and ProductListing screens.
+- **Redux State Management:** Handles authentication and other app state using Redux.
+- **Product Listing:**
+  - Displays a list of products.
+  - Supports searching and filtering by context or category.
+  - Fetches data from a backend API.
+- **Search:**
+  - Search bar with live editing and submit.
+  - Handles empty search with user feedback.
+- **Reusable Components:**
+  - `HomeNavigations`: Navigation bar with icons.
+  - `SearchHeader`: Search input with back button.
+- **API Integration:**
+  - All API requests are made using Axios (or fetch) from the `services/https/requests` directory.
+  - API base URL is configurable for local or production use.
+- **TypeScript:**
+  - Strong typing for navigation, state, and API data.
+
+---
+
+# API URL / IP Address Configuration (Local Development)
+
+When running the app locally, you may need to change the API base URL or IP address so your mobile app can communicate with your backend server.
+
+## Where to Change the API URL
+
+The API base URL is typically defined in a configuration file, such as:
+
+- `app/src/config/config.ts`
+- Or directly in your API request files
+
+**Example:**
+
+```js
+// Example: app/src/config/config.ts
+export const API_BASE_URL = 'http://192.168.1.100:3000/api'; // Change this to your local IP and port
+```
+
+## How to Find Your Local IP Address
+
+- **Windows:** Run `ipconfig` in Command Prompt and look for your IPv4 address.
+- **Mac/Linux:** Run `ifconfig` or `ip a` in Terminal.
+
+## Why?
+
+- **Emulators/Simulators:** Use your machine's local IP address (not `localhost` or `127.0.0.1`) so the app can reach your backend server.
+- **Physical Devices:** Make sure your device is on the same network as your computer.
+
+## Example
+
+If your computer's IP is `192.168.1.100` and your backend runs on port `3000`, set:
+
+```js
+export const API_BASE_URL = 'http://192.168.1.100:3000/api';
+```
+
+---
 
 # Troubleshooting
 
 If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
 
+---
+
 # Learn More
 
-To learn more about React Native, take a look at the following resources:
+- [React Native Website](https://reactnative.dev)
+- [Getting Started](https://reactnative.dev/docs/environment-setup)
+- [Learn the Basics](https://reactnative.dev/docs/getting-started)
+- [Blog](https://reactnative.dev/blog)
+- [`@facebook/react-native`](https://github.com/facebook/react-native)
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+---
+
+**For further details, see comments in the codebase or reach out to the project maintainer.**
