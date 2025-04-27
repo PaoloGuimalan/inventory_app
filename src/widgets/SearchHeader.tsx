@@ -15,11 +15,17 @@ type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 type SearchHeaderType = {
   showBackButton: boolean;
+  value: string;
   onEdit: (e: string) => void;
   onSubmit: () => void;
 };
 
-const SearchHeader = ({showBackButton, onEdit, onSubmit}: SearchHeaderType) => {
+const SearchHeader = ({
+  showBackButton,
+  value,
+  onEdit,
+  onSubmit,
+}: SearchHeaderType) => {
   const navigation = useNavigation<NavigationProp>();
 
   return (
@@ -35,6 +41,7 @@ const SearchHeader = ({showBackButton, onEdit, onSubmit}: SearchHeaderType) => {
       )}
       <View style={styles.searchContainer}>
         <TextInput
+          defaultValue={value}
           style={styles.input}
           onChangeText={e => {
             onEdit(e);

@@ -1,28 +1,40 @@
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import Layout from '../layouts/Layout';
 import HomeNavigations from '../widgets/HomeNavigations';
 import SearchHeader from '../widgets/SearchHeader';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../types/navigation';
+import {NavigationProp} from '../types/navigation';
 import {useNavigation} from '@react-navigation/native';
-
-type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
+import {fetchCategories} from '../services/https/requests/items';
 
 export default function LandingView() {
   const navigation = useNavigation<NavigationProp>();
 
   const [search, setsearch] = useState<string>('');
+  const [categories, setcategories] = useState<string[]>([]);
 
   const submitSearch = useCallback(() => {
-    console.log(search);
-  }, [search]);
+    navigation.navigate('Products', {context: search});
+  }, [navigation, search]);
+
+  useEffect(() => {
+    fetchCategories()
+      .then(response => {
+        if (response.status) {
+          setcategories(response.data.items);
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <Layout
       header={
         <SearchHeader
+          value={search}
           showBackButton={false}
           onEdit={e => {
             setsearch(e);
@@ -34,26 +46,19 @@ export default function LandingView() {
       }
       footer={<HomeNavigations />}>
       <View style={styles.container}>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => {
-            navigation.navigate('Products');
-          }}>
-          <Icon name="category" size={80} color="#000" />
-          <Text style={styles.text}>Tools</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
-          <Icon name="category" size={80} color="#000" />
-          <Text style={styles.text}>Tools</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
-          <Icon name="category" size={80} color="#000" />
-          <Text style={styles.text}>Tools</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
-          <Icon name="category" size={80} color="#000" />
-          <Text style={styles.text}>Tools</Text>
-        </TouchableOpacity>
+        {categories.map((mp: string, i: number) => {
+          return (
+            <TouchableOpacity
+              key={i}
+              style={styles.button}
+              onPress={() => {
+                navigation.navigate('Products', {context: `category:${mp}`});
+              }}>
+              <Icon name="category" size={80} color="#000" />
+              <Text style={styles.text}>{mp}</Text>
+            </TouchableOpacity>
+          );
+        })}
       </View>
     </Layout>
   );

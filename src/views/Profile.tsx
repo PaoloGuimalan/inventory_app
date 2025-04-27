@@ -8,8 +8,11 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {UserAuthentication} from '../redux/types/interface';
 import {SET_AUTHENTICATION} from '../redux/types/types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useNavigation} from '@react-navigation/native';
+import {NavigationProp} from '../types/navigation';
 
 export default function Profile() {
+  const navigation = useNavigation<NavigationProp>();
   const authentication: UserAuthentication = useSelector(
     (state: any) => state.authentication,
   );
@@ -25,13 +28,14 @@ export default function Profile() {
   const [search, setsearch] = useState<string>('');
 
   const submitSearch = useCallback(() => {
-    console.log(search);
-  }, [search]);
+    navigation.navigate('Products', {context: search});
+  }, [navigation, search]);
 
   return (
     <Layout
       header={
         <SearchHeader
+          value={search}
           showBackButton={false}
           onEdit={e => {
             setsearch(e);

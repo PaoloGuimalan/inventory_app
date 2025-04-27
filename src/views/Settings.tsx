@@ -13,8 +13,12 @@ import {useDispatch, useSelector} from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {SET_RECORDS_PER_PAGE} from '../redux/types/types';
 import Icon from 'react-native-vector-icons/Ionicons';
+import Toast from 'react-native-simple-toast';
+import {useNavigation} from '@react-navigation/native';
+import {NavigationProp} from '../types/navigation';
 
 export default function Settings() {
+  const navigation = useNavigation<NavigationProp>();
   const recordsperpage: number = useSelector(
     (state: any) => state.recordsperpage,
   );
@@ -28,19 +32,26 @@ export default function Settings() {
       dispatch({type: SET_RECORDS_PER_PAGE, payload: parseInt(newState, 10)});
 
       await AsyncStorage.setItem('recordsperpage', newState);
+
+      setrecordsperpagetemp('');
+
+      return;
     }
+
+    Toast.show('Please input a number', Toast.SHORT);
   };
 
   const [search, setsearch] = useState<string>('');
 
   const submitSearch = useCallback(() => {
-    console.log(search);
-  }, [search]);
+    navigation.navigate('Products', {context: search});
+  }, [navigation, search]);
 
   return (
     <Layout
       header={
         <SearchHeader
+          value={search}
           showBackButton={false}
           onEdit={e => {
             setsearch(e);
