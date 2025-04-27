@@ -23,13 +23,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffe6cc',
   },
   header: {
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    padding: 10,
+    // paddingBottom: 5,
+    flex: 1,
+    maxHeight: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderTopColor: '#e0e0e0',
+    // backgroundColor: 'green',
   },
   content: {
     flex: 1,
     padding: 16,
+    paddingTop: 5,
     gap: 0,
   },
   footer: {

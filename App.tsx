@@ -15,6 +15,9 @@ import LandingView from './src/views/LandingView';
 import Profile from './src/views/Profile';
 import Settings from './src/views/Settings';
 import {ProductListing} from './src/views/ProductListing';
+import {Provider} from 'react-redux';
+import store from './src/redux/store/store';
+import Home from './src/layouts/Home';
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -30,32 +33,36 @@ function App(): React.JSX.Element {
   });
 
   return (
-    <View style={styles.container}>
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home">
-          <Stack.Screen
-            name="Home"
-            component={LandingView}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="Profile"
-            component={Profile}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="Settings"
-            component={Settings}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="Products"
-            component={ProductListing}
-            options={{headerShown: false}}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </View>
+    <Provider store={store}>
+      <View style={styles.container}>
+        <Home>
+          <NavigationContainer>
+            <Stack.Navigator initialRouteName="Home">
+              <Stack.Screen
+                name="Home"
+                component={LandingView}
+                options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name="Profile"
+                component={Profile}
+                options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name="Settings"
+                component={Settings}
+                options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name="Products"
+                component={ProductListing}
+                options={{headerShown: false}}
+              />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </Home>
+      </View>
+    </Provider>
   );
 }
 
